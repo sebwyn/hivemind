@@ -44,7 +44,7 @@ pub fn spawn_dummy(
                 max_health: 100.,
                 health: 75.,
             },
-            Team::FOE,
+            Team::Foe,
             Dummy,
             Character { move_speed: 0. },
         ))

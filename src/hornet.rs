@@ -47,7 +47,7 @@ pub fn spawn_hornet(
                 max_health: 100.,
                 health: 100.,
             },
-            Team::FRIEND,
+            Team::Friend,
             Hornet,
             Character { move_speed: 5. },
         ))
@@ -74,20 +74,21 @@ fn do_hornet_attack(
     mut handles: ResMut<super::SpriteSheetHandles>,
     asset_server: Res<AssetServer>,
     mut atlases: ResMut<Assets<TextureAtlas>>,
-    hornet_query: Query<(Entity, &Focus, &Transform, &Team), (With<Hornet>, With<Attacking>)>,
+    mut hornet_query: Query<(Entity, &Focus, &Transform, &Team), (With<Hornet>, With<Attacking>)>,
 ) {
-    let handle = super::get_spritesheet_handle_with_cache(
-        "robot_pack/Projectiles/bullets_plasma.png".to_string(),
-        Vec2::splat(16.),
-        3,
-        1,
-        &mut handles,
-        &asset_server,
-        &mut atlases,
-    );
+    let handle =
+        super::get_spritesheet_handle_with_cache(
+            "robot_pack/Projectiles/bullets_plasma.png".to_string(),
+            Vec2::splat(16.),
+            3,
+            1,
+            &mut handles,
+            &asset_server,
+            &mut atlases,
+        );
 
-    for (e, attacking, transform, team) in hornet_query.iter() {
-        let direction = (attacking.position - transform.translation.xy()).normalize();
+    for (e, focus, transform, team ) in hornet_query.iter() {                
+        let direction = (focus.position - transform.translation.xy()).normalize();
         const SPEED: f32 = 15.;
 
         let stinger = commands

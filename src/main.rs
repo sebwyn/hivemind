@@ -6,6 +6,7 @@ mod hornet;
 mod player;
 mod projectile;
 mod world;
+mod partner;
 
 use bevy::{prelude::*, utils::HashMap};
 
@@ -25,6 +26,7 @@ fn main() {
             hornet::HornetPlugin,
             player::PlayerPlugin,
             projectile::ProjectilePlugin,
+            partner::PartnerPlugin,
         ))
         .add_systems(Startup, setup)
         .run();
@@ -38,9 +40,15 @@ fn setup(
 ) {
     commands.spawn(Camera2dBundle::default());
     dummy::spawn_dummy(&mut commands, &mut handles, &asset_server, &mut atlases);
-    let player = hornet::spawn_hornet(&mut commands, &mut handles, &asset_server, &mut atlases);
+    let mind = commands.spawn(player::Mind).id();
+    let friend = hornet::spawn_hornet(&mut commands, &mut handles, &asset_server, &mut atlases);
+    let friend2 = hornet::spawn_hornet(&mut commands, &mut handles, &asset_server, &mut atlases);
 
-    commands.entity(player).insert(player::Player);
+    let roster = vec![friend, friend2];
+
+    commands.entity(friend).insert((partner::Partner, player::Controlled));
+    commands.entity(friend2).insert(partner::Partner);
+    commands.entity(mind).insert(player::Roster{list: roster, current: 0});
 }
 
 fn get_spritesheet_handle_with_cache(
