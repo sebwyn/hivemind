@@ -17,10 +17,6 @@ impl Plugin for TerrainGenerator {
 }
 
 fn spawn_level(mut commands: Commands, asset_server: Res<AssetServer>) {
-    println!("Running!");
-    
-    commands.spawn(Camera2dBundle::default());
-
     commands.spawn(LdtkWorldBundle {
         ldtk_handle: asset_server.load("TestPlatforms.ldtk"),
         ..Default::default()
