@@ -1,7 +1,7 @@
 use bevy::ecs::schedule::States;
 
 #[derive(Default, Debug, Hash, PartialEq, Eq, Clone, States)]
-pub enum GameStates {
+pub enum GameState {
     #[default]
     Loading,
     Playing,
